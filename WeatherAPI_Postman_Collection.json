@@ -1,0 +1,183 @@
+{
+  "info": {
+    "_postman_id": "weather-api-collection",
+    "name": "Weather Data API",
+    "description": "Complete API collection for Weather Data Spring Boot Application",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/api/weather/health",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8081",
+          "path": ["api", "weather", "health"]
+        },
+        "description": "Check if the API is running"
+      }
+    },
+    {
+      "name": "Upload CSV File",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": "sample_weather.csv"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:8081/api/weather/upload",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8081",
+          "path": ["api", "weather", "upload"]
+        },
+        "description": "Upload weather data from CSV file"
+      }
+    },
+    {
+      "name": "Get All Records",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/api/weather/all",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8081",
+          "path": ["api", "weather", "all"]
+        },
+        "description": "Retrieve all weather records from database"
+      }
+    },
+    {
+      "name": "Get Record by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/api/weather/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8081",
+          "path": ["api", "weather", "1"]
+        },
+        "description": "Get a specific weather record by ID"
+      }
+    },
+    {
+      "name": "Update Record",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"datetime_utc\": \"2024-01-01T12:00:00\",\n  \"_conds\": \"Updated Condition\",\n  \"_dewptm\": 10,\n  \"_fog\": 0,\n  \"_hail\": 0,\n  \"_heatindexm\": \"28\",\n  \"_hum\": 75,\n  \"_precipm\": \"0.5\",\n  \"_pressurem\": 1015,\n  \"_rain\": 1,\n  \"_snow\": 0,\n  \"_tempm\": 25,\n  \"_thunder\": 0,\n  \"_tornado\": 0,\n  \"_vism\": \"10\",\n  \"_wdird\": 180,\n  \"_wdire\": \"S\",\n  \"_wgustm\": \"18\",\n  \"_windchillm\": \"23\",\n  \"_wspdm\": \"12\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8081/api/weather/update/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8081",
+          "path": ["api", "weather", "update", "1"]
+        },
+        "description": "Update an existing weather record"
+      }
+    },
+    {
+      "name": "Delete Record",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/api/weather/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8081",
+          "path": ["api", "weather", "1"]
+        },
+        "description": "Delete a weather record by ID"
+      }
+    },
+    {
+      "name": "Filter by Humidity",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/api/weather/humidity/filter?hum=60",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8081",
+          "path": ["api", "weather", "humidity", "filter"],
+          "query": [
+            {
+              "key": "hum",
+              "value": "60"
+            }
+          ]
+        },
+        "description": "Get records with humidity greater than specified value"
+      }
+    },
+    {
+      "name": "Filter by Temperature",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/api/weather/temperature/filter?temp=20",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8081",
+          "path": ["api", "weather", "temperature", "filter"],
+          "query": [
+            {
+              "key": "temp",
+              "value": "20"
+            }
+          ]
+        },
+        "description": "Get records with temperature >= specified value"
+      }
+    },
+    {
+      "name": "Filter by Rain",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/api/weather/rain/filter?rain=1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8081",
+          "path": ["api", "weather", "rain", "filter"],
+          "query": [
+            {
+              "key": "rain",
+              "value": "1"
+            }
+          ]
+        },
+        "description": "Get records with specific rain value (0 or 1)"
+      }
+    }
+  ]
+}
+
