@@ -14,17 +14,30 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/weather")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class WeatherController {
 
     @Autowired
     private WeatherRepo weatherRepo;
 
-    @PostMapping(value = "/file", consumes = "multipart/form-data")
+    // Health Check Endpoint
+    @GetMapping("/health")
+    public ResponseEntity<String> health() {
+        return ResponseEntity.ok("Weather API is running successfully!");
+    }
+
+    @PostMapping("/upload")
     public ResponseEntity<String> uploadWeatherData(@RequestParam("file") MultipartFile file) {
+        // Validate file is not empty
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("File is empty");
+        }
+
+        // Validate file name and extension
+        String filename = file.getOriginalFilename();
+        if (filename == null || (!filename.endsWith(".csv") && !filename.endsWith(".CSV"))) {
+            return ResponseEntity.badRequest().body("File must be a CSV file");
         }
 
         try (BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
@@ -173,7 +186,7 @@ public class WeatherController {
     public ResponseEntity<List<WeatherModel>> filterByRain(@RequestParam Integer rain) {
         List<WeatherModel> all = weatherRepo.findAll();
         List<WeatherModel> filtered = all.stream()
-                .filter(w -> w.get_rain().equals(rain))
+                .filter(w -> w.get_rain() != null && w.get_rain().equals(rain))
                 .toList();
 
         if (filtered.isEmpty()) {
