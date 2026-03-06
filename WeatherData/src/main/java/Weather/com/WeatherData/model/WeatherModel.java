@@ -79,4 +79,8 @@ public class WeatherModel {
 
     @JsonProperty("_wspdm")
     private String _wspdm;
+
+
+    private  String location;
+
 }
