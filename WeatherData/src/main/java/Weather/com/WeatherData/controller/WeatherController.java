@@ -40,10 +40,11 @@ public class WeatherController {
             return ResponseEntity.badRequest().body("File must be a CSV file");
         }
 
+        int savedCount;
         try (BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
             String line;
             int lineNumber = 0;
-            int savedCount = 0;
+            savedCount = 0;
 
             while ((line = br.readLine()) != null) {
                 lineNumber++;
@@ -85,12 +86,13 @@ public class WeatherController {
                     System.err.println("Error parsing line " + lineNumber + ": " + e.getMessage());
                 }
             }
-
+            System.out.println("SAVE COUNT:+" + savedCount);
             return ResponseEntity.ok("File processed successfully. Saved " + savedCount + " records.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error processing the file: " + e.getMessage());
         }
+
     }
 
     @GetMapping("/all")
@@ -156,6 +158,7 @@ public class WeatherController {
         return ResponseEntity.ok("Updated successfully");
     }
 
+    // Custom filter endpoint to find records with specific rain value
     @GetMapping("/humidity/filter")
     public ResponseEntity<List<WeatherModel>> filterByHumidity(@RequestParam Integer hum) {
         List<WeatherModel> all = weatherRepo.findAll();
@@ -169,6 +172,7 @@ public class WeatherController {
         return ResponseEntity.ok(filtered);
     }
 
+    // Filer by tempeature greater than specified value
     @GetMapping("/temperature/filter")
     public ResponseEntity<List<WeatherModel>> filterByTemperature(@RequestParam Integer temp) {
         List<WeatherModel> all = weatherRepo.findAll();
@@ -182,6 +186,7 @@ public class WeatherController {
         return ResponseEntity.ok(filtered);
     }
 
+    // Filter by rain presence
     @GetMapping("/rain/filter")
     public ResponseEntity<List<WeatherModel>> filterByRain(@RequestParam Integer rain) {
         List<WeatherModel> all = weatherRepo.findAll();
@@ -195,4 +200,31 @@ public class WeatherController {
         return ResponseEntity.ok(filtered);
     }
 
+    // Filter by dew point temperature
+    @GetMapping("/dewptm/filter")
+    public ResponseEntity<List<WeatherModel>> filterByDewptm(@RequestParam Integer dew) {
+        List<WeatherModel> all = weatherRepo.findAll();
+        List<WeatherModel> filtered = all.stream()
+                .filter(w -> w.get_dewptm() != null && w.get_dewptm().equals(dew))
+                .toList();
+
+        if (filtered.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(filtered);
+    }
+
+    // Filter by exact rain value
+    @GetMapping("/rain/exact-filter")
+    public ResponseEntity<List<WeatherModel>> filterByrain(@RequestParam Integer rain) {
+        List<WeatherModel> all = weatherRepo.findAll();
+        List<WeatherModel> filtered = all.stream()
+                .filter(w -> w.get_rain() != null && w.get_rain().equals(rain))
+                .toList();
+
+        if (filtered.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(filtered);
+    }
 }
